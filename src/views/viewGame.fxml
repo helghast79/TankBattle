@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="borderPaneCSS" fx:id="borderPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CtrGame">
+    <center>
+        <Pane BorderPane.alignment="CENTER">
+            <children>
+                <GridPane fx:id="gridPane" alignment="CENTER" depthTest="DISABLE" layoutX="20.0" layoutY="23.0" onMouseClicked="#gridPaneOnClick" onMouseEntered="#gridPaneOnEnter" onMouseExited="#gridPaneOnExit" onMouseMoved="#gridPaneOnMove" prefHeight="463.0" prefWidth="717.0" scaleShape="false">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <cursor>
+                        <Cursor fx:constant="CROSSHAIR" />
+                    </cursor>
+                </GridPane>
+            </children>
+        </Pane>
+    </center>
+    <bottom>
+        <Pane BorderPane.alignment="CENTER">
+            <children>
+                <TextArea fx:id="textAreaDown" editable="false" layoutX="137.0" layoutY="2.0" prefHeight="41.0" prefWidth="527.0">
+                    <font>
+                        <Font size="10.0" />
+                    </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+                </TextArea>
+            </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets bottom="2.0" />
+         </BorderPane.margin>
+        </Pane>
+    </bottom>
+    <top>
+        <Label fx:id="labelUp" alignment="CENTER" contentDisplay="CENTER" prefHeight="52.0" prefWidth="793.0" text="Tank Battle" textFill="WHITE" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="37.0" />
+            </font>
+        </Label>
+    </top>
+    <left>
+        <Pane prefHeight="503.0" prefWidth="53.0">
+            <children>
+                <Button id="quitBtnCSS" fx:id="quitBtn" layoutX="3.0" layoutY="453.0" mnemonicParsing="false" onMouseClicked="#quitBtnOnClick" prefHeight="44.0" prefWidth="55.0" text="Main Menu" textAlignment="CENTER" wrapText="true" />
+                <Button id="endTurnBtnCSS" fx:id="endTurnBtn" layoutX="3.0" layoutY="401.0" mnemonicParsing="false" onMouseClicked="#endTurnBtnOnClick" prefHeight="44.0" prefWidth="54.0" text="End Turn" textAlignment="CENTER" wrapText="true" />
+                <ImageView id="armorIconCSS" fx:id="armorIcon" fitHeight="50.0" fitWidth="50.0" layoutX="3.0" pickOnBounds="true" preserveRatio="true" />
+                <Label id="armorLblCSS" fx:id="armorLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="67.0" prefHeight="17.0" prefWidth="46.0" text="value" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label id="moveLblCSS" fx:id="moveLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="337.0" prefHeight="36.0" prefWidth="48.0" text="Move" textAlignment="CENTER" wrapText="true">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label id="attackLblCSS" fx:id="attackLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="175.0" prefHeight="17.0" prefWidth="50.0" text="Attack" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <ImageView id="attackIconCSS" fx:id="attackIcon" fitHeight="50.0" fitWidth="50.0" layoutX="2.0" layoutY="125.0" onMouseClicked="#attackIconOnClick" pickOnBounds="true" preserveRatio="true" />
+            <Label id="armorLblCSS" fx:id="armorLbl1" alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="50.0" prefHeight="17.0" prefWidth="47.0" text="Armor" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <ImageView id="repairIconCSS" fx:id="repairIcon" fitHeight="50.0" fitWidth="50.0" layoutX="2.0" layoutY="212.0" onMouseClicked="#repairIconOnClick" pickOnBounds="true" preserveRatio="true" />
+            <Label id="repairLblCSS" fx:id="repairLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="262.0" prefHeight="17.0" prefWidth="50.0" text="Repair" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <ImageView id="moveIconCSS" fx:id="moveIcon" fitHeight="50.0" fitWidth="50.0" layoutX="2.0" layoutY="298.0" onMouseClicked="#moveIconOnClick" pickOnBounds="true" preserveRatio="true" />
+            </children>
+        </Pane>
+    </left>
+</BorderPane>

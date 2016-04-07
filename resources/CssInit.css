@@ -1,0 +1,47 @@
+.root{
+    -styleDefault-color: white;
+}
+
+
+#paneCSS {
+    -fx-background-color: black;
+    -fx-background-image: url("/background.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 800 600;
+    -fx-background-position: center center;
+}
+#infoLblCSS {
+    -fx-text-fill: -styleDefault-color;
+}
+#newGameLblCSS {
+    -fx-text-fill: -styleDefault-color;
+}
+#continueGameLblCSS {
+    -fx-text-fill: -styleDefault-color;
+}
+#exitLblCSS {
+    -fx-text-fill: -styleDefault-color;
+}
+#attackLblCSS{
+    -fx-text-fill: -styleDefault-color;
+}
+#repairLblCSS{
+    -fx-text-fill: -styleDefault-color;
+}
+#moveLblCSS{
+    -fx-text-fill: -styleDefault-color;
+}
+
+
+/*
+#createGame-button {
+   -fx-background-color:transparent;
+   -fx-background-image: url('../../resources/btn1.png');
+   -fx-background-repeat: stretch;
+   -fx-background-position: center;
+  -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+#createGame-button:select {
+    -fx-background-image: url('../../resources/btn2.png');
+}*/

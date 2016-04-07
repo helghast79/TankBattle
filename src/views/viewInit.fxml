@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane id="paneCSS" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#paneOnClick" onMouseMoved="#paneOnMove" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CtrInit">
+   <children>
+      <Label id="infoLblCSS" fx:id="infoLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="561.0" prefHeight="17.0" prefWidth="783.0" text="information">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label id="continueGameLblCSS" fx:id="continueGameLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="197.0" layoutY="387.0" onMouseClicked="#continueGameLblOnClick" onMouseEntered="#continueGameLblOnEnter" onMouseExited="#continueGameLblOnExit" prefHeight="73.0" prefWidth="408.0" text="Continue Game">
+         <font>
+            <Font name="System Bold" size="50.0" />
+         </font>
+      </Label>
+      <Label id="newGameLblCSS" fx:id="newGameLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="258.0" layoutY="314.0" onMouseClicked="#newGameLblOnClick" onMouseEntered="#newGameLblOnEnter" onMouseExited="#newGameLblExit" prefHeight="63.0" prefWidth="286.0" text="New Game">
+         <font>
+            <Font name="System Bold" size="50.0" />
+         </font>
+      </Label>
+      <Label id="exitLblCSS" fx:id="exitLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="342.0" layoutY="460.0" onMouseClicked="#exitLblOnClick" onMouseEntered="#exitLblOnEnter" onMouseExited="#exitLblOnExit" prefHeight="73.0" prefWidth="117.0" text="Exit">
+         <font>
+            <Font name="System Bold" size="50.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

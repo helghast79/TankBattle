@@ -1,0 +1,42 @@
+.root{
+    -styleDefault-color: white;
+}
+
+
+#paneCSS{
+    -fx-background-color: black;
+    -fx-background-image: url("/background.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 800 600;
+    -fx-background-position: center center;
+}
+#serverAddressTxtCSS{
+    -fx-text-fill: black;
+}
+#serverAddressLblCSS{
+    -fx-text-fill:  -styleDefault-color;
+}
+#newGameLblCSS{
+    -fx-text-fill: -styleDefault-color;
+}
+#playerNameTxtCSS {
+    -fx-text-fill: black;
+}
+#playerNameLblCSS{
+    -fx-text-fill: -styleDefault-color;
+}
+#serverPortTxtCSS{
+    -fx-text-fill: black;
+}
+#serverPortLblCSS{
+    -fx-text-fill:  -styleDefault-color;
+}
+#infoLblCSS{
+    -fx-text-fill:  -styleDefault-color;
+}
+#backLblCSS{
+    -fx-text-fill:  -styleDefault-color;
+}
+#startLblCSS{
+    -fx-text-fill:  -styleDefault-color;
+}
