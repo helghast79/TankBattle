@@ -21,21 +21,27 @@
 #weaponIconCSS {
     -fx-image: url("/weapon.png");
 }
+#moveIconCSS {
+    -fx-image: url("/move.png");
+}
+#repairIconCSS {
+     -fx-image: url("/repair.png");
+ }
+
+
 
 
 #armorLblCSS{
      -fx-text-fill: -styleDefault-color;
  }
-#healthLblCSS{
+
+#moveLblCSS{
     -fx-text-fill: -styleDefault-color;
 }
-#movesLblCSS{
+#repairLblCSS{
     -fx-text-fill: -styleDefault-color;
 }
-#movesLeftLblCSS{
-    -fx-text-fill: -styleDefault-color;
-}
-#weaponLblCSS{
+#attackLblCSS{
     -fx-text-fill: -styleDefault-color;
 }
 

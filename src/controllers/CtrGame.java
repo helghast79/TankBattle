@@ -27,8 +27,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.*;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -36,6 +38,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Polygon;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import main.Navigation;
 import main.Settings;
@@ -69,7 +74,6 @@ public class CtrGame implements Initializable {
 
     private SequentialTransition myTank_seqT_Working;
     private SequentialTransition enemyTank_seqT_Working;
-
 
 
     //weapons
@@ -162,10 +166,12 @@ public class CtrGame implements Initializable {
         }
 
     }
+
     @FXML
     void moveIconOnClick(MouseEvent event) {
 
     }
+
     @FXML
     void repairIconOnClick(MouseEvent event) {
 
@@ -219,19 +225,24 @@ public class CtrGame implements Initializable {
         //still moving tank
         if (player.isMovingNow()) return;
 
-        //hover in myTank
-        if (event.getTarget() == player.getImageView()) {
-            drawRectangleOnRange(1);
-            return;
-        } else {
-            clearMarks();
-        }
 
         int dy = getPositionDy((Node) event.getTarget());
         int dx = getPositionDx((Node) event.getTarget());
 
+        //hover in myTank
+        if (event.getTarget() == player.getArmorLbl() || event.getTarget() == player.getImageView()) {
+            player.getArmorLbl().setContentDisplay(ContentDisplay.CENTER);
+            gridPane.setCursor(Cursor.NONE);
+            return;
+        } else {
+            player.getArmorLbl().setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            gridPane.setCursor(Cursor.DEFAULT);
+
+        }
+
 
         changeTankSpriteToFollowCursor(dx, dy);
+
 
         //check if cell is available for moving
         if (checkIfTankCanMoveToCell((Node) event.getTarget())) {
@@ -284,7 +295,8 @@ public class CtrGame implements Initializable {
         loadToolbarSprites();
 
         //add player to the grid
-        gridPane.add(player.getImageView(), player.getCol(), player.getRow());
+        //gridPane.add(player.getImageView(), player.getCol(), player.getRow());
+        gridPane.add(player.getArmorLbl(), player.getCol(), player.getRow()); //to display armor also
 
         //Tank animation - standby
         anim_TankWorking_Start(myTank_seqT_Working, player.getImageView());
@@ -383,7 +395,7 @@ public class CtrGame implements Initializable {
         player.setImageUpRight(getImage("tank_mv_right_up.png"));
         player.setImageUpLeft(getImage("tank_mv_up_left.png"));
 
-        //setArgsPassedByGameSetupController imageview
+        //image view
         ImageView imgView = new ImageView();
         imgView.setImage(player.getImageRight()); //initial image
         imgView.setPreserveRatio(true);
@@ -391,13 +403,24 @@ public class CtrGame implements Initializable {
         imgView.setCache(true);
         imgView.setFitHeight(Settings.TANK_IMAGE_SIZE);
         imgView.setFitWidth(Settings.TANK_IMAGE_SIZE);
+
         player.setImageView(imgView);
 
-        //setArgsPassedByGameSetupController weapon
+        //add weapons
         player.addWeapon(0, createWeapon(weapons.CANNON));
         player.addWeapon(1, createWeapon(weapons.MISSILE));
-
+        //set current weapon
         player.setCurrentWeaponIndex(0); //cannon
+
+        //armor label
+        Label armorLabel = new Label();
+        armorLabel.setFont(new Font("Arial", 15));
+        armorLabel.setText(player.getArmorString());
+        armorLabel.setGraphic(imgView);
+        armorLabel.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        armorLabel.setTextFill(Color.WHITE);
+
+        player.setArmorLbl(armorLabel);
 
     }
 
@@ -444,14 +467,15 @@ public class CtrGame implements Initializable {
 
         player.setMovingNow(true);
 
-        gridPane.getChildren().remove(player.getImageView());
+        //gridPane.getChildren().remove(player.getImageView());
+        gridPane.getChildren().remove(player.getArmorLbl());
         player.setCol(player.getCol() + cols);
         player.setRow(player.getRow() + rows);
 
-        gridPane.add(player.getImageView(), player.getCol(), player.getRow());
+        //gridPane.add(player.getImageView(), player.getCol(), player.getRow());
+        gridPane.add(player.getArmorLbl(), player.getCol(), player.getRow());
 
-
-        TranslateTransition tt = new TranslateTransition(Duration.millis(Settings.TIME_TANK_MOVE), player.getImageView());
+        TranslateTransition tt = new TranslateTransition(Duration.millis(Settings.TIME_TANK_MOVE), player.getArmorLbl());
         tt.setFromY(-Settings.CELL_HEIGTH * rows);
         tt.setToY(0d);
         tt.setFromX(-Settings.CELL_WIDTH * cols);
@@ -500,8 +524,8 @@ public class CtrGame implements Initializable {
     }
 
     //the effective draw method for the marks
-    private void drawRectangleOnRange(int rangeRadious) {
-
+    private void drawRectangleOnRange(int col, int row) {
+/*
         //check if array of marks is not empty
         if (myTankMoveOptions.size() > 0) {
 
@@ -544,7 +568,31 @@ public class CtrGame implements Initializable {
                 GridPane.setValignment(mark, VPos.CENTER);
 
             }
-        }
+        }*/
+
+
+        //save location of myTankOptions tank position
+        myTankMoveOptions_col = player.getCol();
+        myTankMoveOptions_row = player.getRow();
+
+
+        //draw marks
+
+        //Rectangle mark = new Rectangle(Settings.CELL_WIDTH/2, Settings.CELL_HEIGTH/2, Color.BLACK);
+        Polygon mark = new Polygon(0, 0, Settings.CELL_WIDTH, 0, Settings.CELL_WIDTH, Settings.CELL_HEIGTH, 0, Settings.CELL_HEIGTH);
+        //Rectangle2D mark = new Rectangle2D(0,0,Settings.CELL_WIDTH,Settings.CELL_HEIGTH);
+        mark.setStroke(Color.BLUE);
+        mark.setStrokeWidth(2.0d);
+        mark.setVisible(true);
+        mark.setOpacity(0.6f);
+
+
+        gridPane.add(mark, col, row);
+
+        GridPane.setHalignment(mark, HPos.CENTER);
+        GridPane.setValignment(mark, VPos.CENTER);
+
+
     }
 
     //get diference between tank position and node position

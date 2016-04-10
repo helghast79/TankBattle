@@ -1,5 +1,6 @@
 package gameobjects;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -19,6 +20,8 @@ public class Player {
     private Image imageDownRight;
     private Image imageDownLeft;
     private Image imageUpRight;
+    private Image imageUpLeft;
+private Label armorLbl;
 
     public Image getImageDownRight() {
         return imageDownRight;
@@ -52,7 +55,7 @@ public class Player {
         this.imageUpLeft = imageUpLeft;
     }
 
-    private Image imageUpLeft;
+
 
     private ArrayList<Weapon> weapons;
     private int currentWeaponIndex;
@@ -130,6 +133,9 @@ public class Player {
     public int getArmor() {
         return armor;
     }
+    public String getArmorString() {
+        return Integer.toString(armor);
+    }
 
     public int getTotalMoves() {
         return totalMoves;
@@ -179,6 +185,10 @@ public class Player {
         this.movesLeft = movesLeft;
     }
 
+
+
+
+
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
@@ -186,6 +196,21 @@ public class Player {
     public void setImageViewImage(Image image) {
         this.imageView.setImage(image);
     }
+
+
+
+   //Label
+    public Label getArmorLbl() {
+        return armorLbl;
+    }
+
+    public void setArmorLbl(Label armorLbl) {
+        this.armorLbl = armorLbl;
+    }
+
+
+
+
 
     public void addWeapon(Weapon weapon) {
         this.weapons.add(weapon);
