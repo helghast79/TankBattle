@@ -1,5 +1,7 @@
 package main;
 
+import javafx.scene.paint.Color;
+
 /**
  * Created by macha on 20/03/2016.
  */
@@ -34,7 +36,14 @@ public class Settings {
     public static final int TANK_DEFAULT_ARMOR = 100;
     public static final int TANK_DEFAULT_INIT_ROW = 9;
     public static final int TANK_DEFAULT_INIT_COL = 0;
-    public static final int TANK_DEFAULT_TOTAL_MOVES = 3;
+    public static final int TANK_DEFAULT_TOTAL_MOVES = 1;
+
+    //weapons
+    public static final int WEAPON_MISSILE_RANGE = 2;
+    public static final int WEAPON_CANNON_RANGE = 1;
+    public static final Color WEAPON_MISSILE_COLOR = Color.YELLOW;
+    public static final Color WEAPON_CANNON_COLOR = Color.RED;
+    public static final Color MOVE_COLOR = Color.BLUE;
 
     //Miscellaneous
     public static final String IPADDRESS_PATTERN =

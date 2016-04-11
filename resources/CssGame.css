@@ -11,38 +11,103 @@
     -fx-background-position: center center;
 }
 
-#healthIconCSS {
-    -fx-image: url("/health.png");
+
+
+/*labels*/
+#weapon1LblCSS{
+    -fx-text-fill: -styleDefault-color;
 }
-
-#armorIconCSS {
-    -fx-image: url("/armor.png");
+#weapon2LblCSS{
+    -fx-text-fill: -styleDefault-color;
 }
-#weaponIconCSS {
-    -fx-image: url("/weapon.png");
-}
-#moveIconCSS {
-    -fx-image: url("/move.png");
-}
-#repairIconCSS {
-     -fx-image: url("/repair.png");
- }
-
-
-
-
-#armorLblCSS{
-     -fx-text-fill: -styleDefault-color;
- }
-
 #moveLblCSS{
     -fx-text-fill: -styleDefault-color;
 }
 #repairLblCSS{
     -fx-text-fill: -styleDefault-color;
 }
-#attackLblCSS{
-    -fx-text-fill: -styleDefault-color;
+
+
+
+
+/*buttons*/
+#weapon1BtnCSS {
+    -fx-graphic: url("/weapon_shell_mini.png");
+    -fx-background-color: transparent;
+}
+
+#weapon1BtnCSS:hover {
+    -fx-graphic: url("/weapon_shell_mini_hover.png");
+}
+
+#weapon1BtnCSS:selected {
+    -fx-graphic: url("/weapon_shell_mini_sel.png");
+}
+
+
+#weapon2BtnCSS {
+    -fx-graphic: url("/weapon_missile_mini.png");
+    -fx-background-color: transparent;
+}
+
+#weapon2BtnCSS:hover {
+    -fx-graphic: url("/weapon_missile_mini_hover.png");
+}
+
+#weapon2BtnCSS:selected {
+    -fx-graphic: url("/weapon_missile_mini_sel.png");
+}
+
+
+
+
+#moveBtnCSS {
+    -fx-graphic: url("/move_mini.png");
+    -fx-background-color: transparent;
+}
+
+#moveBtnCSS:hover {
+    -fx-graphic: url("/move_mini_hover.png");
+}
+
+#moveBtnCSS:selected {
+    -fx-graphic: url("/move_mini_sel.png");
+}
+
+
+#repairBtnCSS {
+    -fx-graphic: url("/repair_mini.png");
+    -fx-background-color: transparent;
+}
+
+#repairBtnCSS:hover {
+    -fx-graphic: url("/repair_mini_hover.png");
+}
+
+#repairBtnCSS:selected {
+    -fx-graphic: url("/repair_mini_sel.png");
+}
+
+
+
+
+
+#quitBtnCSS {
+    -fx-graphic: url("/main_menu_mini.png");
+    -fx-background-color: transparent;
+}
+
+#quitBtnCSS:hover {
+    -fx-graphic: url("/main_menu_mini_hover.png");
+}
+
+#endTurnBtnCSS {
+    -fx-graphic: url("/end_turn_mini.png");
+    -fx-background-color: transparent;
+}
+
+#endTurnBtnCSS:hover {
+    -fx-graphic: url("/end_turn_mini_hover.png");
 }
 
 /*

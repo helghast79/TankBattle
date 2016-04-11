@@ -28,11 +28,8 @@ import javafx.geometry.*;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +37,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import main.Navigation;
@@ -90,12 +88,6 @@ public class CtrGame implements Initializable {
 
     //NODES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
     private BorderPane borderPane;
 
     @FXML
@@ -114,31 +106,31 @@ public class CtrGame implements Initializable {
     private Button endTurnBtn;
 
     @FXML
-    private ImageView armorIcon;
-
-    @FXML
-    private Label armorLbl;
-
-    @FXML
     private Label moveLbl;
 
     @FXML
-    private Label attackLbl;
+    private Label weapon1Lbl;
 
     @FXML
-    private ImageView attackIcon;
-
-    @FXML
-    private Label armorLbl1;
-
-    @FXML
-    private ImageView repairIcon;
+    private Label weapon2Lbl;
 
     @FXML
     private Label repairLbl;
 
     @FXML
-    private ImageView moveIcon;
+    private ToggleButton weapon1Btn;
+
+    @FXML
+    private Label weapon1Lbl1;
+
+    @FXML
+    private ToggleButton weapon2Btn;
+
+    @FXML
+    private ToggleButton repairBtn;
+
+    @FXML
+    private ToggleButton moveBtn;
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -150,30 +142,54 @@ public class CtrGame implements Initializable {
 
     }
 
+
     @FXML
     void quitBtnOnClick(MouseEvent event) {
         //return to menu
         Navigation.getInstance().loadView("viewInit");
     }
 
-    @FXML
-    void attackIconOnClick(MouseEvent event) {
-        Weapon w = player.getNextWeapon();
 
-        if (w != null) {
-            attackIcon.setImage(w.getImageIcon());
-            attackLbl.setText(w.getName());
+    @FXML
+    void moveBtnOnClick(MouseEvent event) {
+        //clear rectangle marks
+        clearRectangles();
+
+        if(moveBtn.isSelected()){
+            putMarks(player.getTotalMoves(), Settings.MOVE_COLOR);
+        }else{
+            clearRectangles();
+        }
+    }
+    @FXML
+    void repairBtnOnClick(MouseEvent event) {
+        //clear rectangle marks
+        clearRectangles();
+
+    }
+
+    @FXML
+    void weapon1BtnOnClick(MouseEvent event) {
+        clearRectangles();
+
+        if(weapon1Btn.isSelected()){
+            putMarks(Settings.WEAPON_CANNON_RANGE, Settings.WEAPON_CANNON_COLOR);
+        }else{
+            clearRectangles();
         }
 
-    }
-
-    @FXML
-    void moveIconOnClick(MouseEvent event) {
 
     }
 
     @FXML
-    void repairIconOnClick(MouseEvent event) {
+    void weapon2BtnOnClick(MouseEvent event) {
+        clearRectangles();
+
+        if(weapon2Btn.isSelected()){
+            putMarks(Settings.WEAPON_MISSILE_RANGE, Settings.WEAPON_MISSILE_COLOR);
+        }else{
+            clearRectangles();
+        }
 
     }
     // ========================================================
@@ -261,7 +277,6 @@ public class CtrGame implements Initializable {
     @Override //first method called
     public void initialize(URL location, ResourceBundle resources) {
 
-        playerName = "fff";//only during debug because playername is bypassed
         initAssertAllNodes();
 
         //load map from map.txt and populate the gridpane
@@ -313,15 +328,14 @@ public class CtrGame implements Initializable {
         assert labelUp != null : "fx:id=\"labelUp\" was not injected: check your FXML file 'viewGame.fxml'.";
         assert quitBtn != null : "fx:id=\"quitBtn\" was not injected: check your FXML file 'viewGame.fxml'.";
         assert endTurnBtn != null : "fx:id=\"endTurnBtn\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert armorIcon != null : "fx:id=\"armorIcon\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert armorLbl != null : "fx:id=\"armorLbl\" was not injected: check your FXML file 'viewGame.fxml'.";
         assert moveLbl != null : "fx:id=\"moveLbl\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert attackLbl != null : "fx:id=\"attackLbl\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert attackIcon != null : "fx:id=\"attackIcon\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert armorLbl1 != null : "fx:id=\"armorLbl1\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert repairIcon != null : "fx:id=\"repairIcon\" was not injected: check your FXML file 'viewGame.fxml'.";
+        assert weapon1Lbl != null : "fx:id=\"weapon1Lbl\" was not injected: check your FXML file 'viewGame.fxml'.";
         assert repairLbl != null : "fx:id=\"repairLbl\" was not injected: check your FXML file 'viewGame.fxml'.";
-        assert moveIcon != null : "fx:id=\"moveIcon\" was not injected: check your FXML file 'viewGame.fxml'.";
+        assert weapon1Btn != null : "fx:id=\"weapon1Btn\" was not injected: check your FXML file 'viewGame.fxml'.";
+        assert weapon2Lbl != null : "fx:id=\"weapon1Lbl1\" was not injected: check your FXML file 'viewGame.fxml'.";
+        assert weapon2Btn != null : "fx:id=\"weapon2Btn\" was not injected: check your FXML file 'viewGame.fxml'.";
+        assert repairBtn != null : "fx:id=\"repairBtn\" was not injected: check your FXML file 'viewGame.fxml'.";
+        assert moveBtn != null : "fx:id=\"moveBtn\" was not injected: check your FXML file 'viewGame.fxml'.";
     }
 
     //construct the gridPane with the map from file
@@ -430,33 +444,33 @@ public class CtrGame implements Initializable {
 
         switch (weapon) {
             case MISSILE:
-                w = new Weapon("Missile", 20, 1, 1, 5, 2);
+                w = new Weapon("Missile", 10, 1, 1, Settings.WEAPON_MISSILE_RANGE, 1);
                 w.setImageIcon(getImage("weapon_missile.png"));
                 break;
             case CANNON:
-                w = new Weapon("Cannon", 5, 2, 0, 3, 1);
+                w = new Weapon("Cannon", 20, 1, 0, Settings.WEAPON_CANNON_RANGE, 1);
                 w.setImageIcon(getImage("weapon_shell.png"));
                 break;
         }
         return w;
     }
 
-    //load the left toolbar
+    //load the left toolbar - not needed enymore
     private void loadToolbarSprites() {
 
-        //most properties are initiated in CSS, those that cannot are setArgsPassedByGameSetupController here
-        armorIcon.setFitHeight(50);
-        armorIcon.setFitWidth(50);
+        weapon1Lbl.setText(player.getWeapon(0).getName());
+        weapon2Lbl.setText(player.getWeapon(1).getName());
 
-        attackIcon.setFitHeight(50);
-        attackIcon.setFitHeight(50);
+
+        //most properties are initiated in CSS, those that cannot are setArgsPassedByGameSetupController here
+
 
         //set current weapon
-        Weapon w = player.getWeapon(0);
+       /* Weapon w = player.getWeapon(0);
         if (w != null) {
             attackIcon.setImage(w.getImageIcon());
             attackLbl.setText(w.getName());
-        }
+        }*/
     }
     //::::::::::::::::::::::::::::::::::::::::::
 
@@ -745,17 +759,60 @@ public class CtrGame implements Initializable {
     }
 
     //delete the marks that indicate possible moves
-    private void clearMarks() {
+    private void putMarks(int range, Color color) {
 
-        //clear previous mark
-        for (Label l : myTankMoveOptions.values()) {
-            gridPane.getChildren().remove(l);
+        int playerCol = player.getCol();
+        int playerRow = player.getRow();
+
+
+        for (int col = -range; col <= range; col++) {
+            for (int row = -range; row <= range; row++) {
+
+                if (col == 0 && row == 0) {continue;}
+                if(Math.abs(col) != range && Math.abs(row) != range) {continue;}
+                if (playerCol + col < 0 || playerCol + col > Settings.GRID_COLS - 1) {continue;}
+                if (playerRow + row < 0 || playerRow + row > Settings.GRID_ROWS - 1) {continue;}
+                if(cells[playerRow + row][playerCol + col].getType()==CellTypes.MOUNTAIN_A ||
+                        cells[playerRow + row][playerCol + col].getType()==CellTypes.MOUNTAIN_B) {continue;}
+
+                putReactangle(playerCol+col,playerRow+row,color);
+
+            }
         }
-
-        myTankMoveOptions.clear();
 
     }
 
+    //add rectangle border to the cell
+    private void putReactangle(int col, int row, Color color) {
+        //test inser rectangle under the picture
+        Polygon border = new Polygon(0, 0, Settings.CELL_WIDTH, 0, Settings.CELL_WIDTH, Settings.CELL_HEIGTH, 0, Settings.CELL_HEIGTH);
+        border.setFill(Color.TRANSPARENT);
+        border.setStroke(color);
+        border.setStrokeWidth(1.0d);
+        border.setVisible(true);
+        border.setOpacity(0.7f);
+        gridPane.add(border, col, row);
+        //--------------------------------------
+
+    }
+
+    //clear rectangles
+    private void clearRectangles() {
+        ArrayList<Node> nodes = new ArrayList<Node>();
+
+        for (Node n : gridPane.getChildren()) {
+
+            if (n.getClass() == Polygon.class) {
+                nodes.add(n);
+            }
+        }
+
+        for (int i = 0; i < nodes.size(); i++) {
+            gridPane.getChildren().remove(nodes.get(i));
+        }
+
+
+    }
 
     //::::::::::::::::::::::::::::::::::::::::::
 
