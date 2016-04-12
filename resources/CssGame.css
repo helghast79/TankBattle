@@ -83,8 +83,10 @@
 #repairBtnCSS:hover {
     -fx-graphic: url("/repair_mini_hover.png");
 }
-
-#repairBtnCSS:selected {
+/*#repairBtnCSS:hover:selected {
+    -fx-graphic: url("/repair_mini_hover.png");
+}*/
+#repairBtnCSS:selected{
     -fx-graphic: url("/repair_mini_sel.png");
 }
 

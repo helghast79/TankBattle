@@ -166,6 +166,11 @@ public class CtrGame implements Initializable {
         //clear rectangle marks
         clearRectangles();
 
+        if(repairBtn.isSelected()){
+            putReactangle(player.getCol(),player.getRow(),Color.BROWN);
+        }else{
+            clearRectangles();
+        }
     }
 
     @FXML
@@ -212,16 +217,38 @@ public class CtrGame implements Initializable {
         }
 
 
-        int dy = getPositionDy((Node) event.getTarget());
-        int dx = getPositionDx((Node) event.getTarget());
+        int row = getPositionRow((Node) event.getTarget());
+        int col = getPositionCol((Node) event.getTarget());
 
 
-        if (dx <= 1 && dx >= -1 && dy <= 1 && dy >= -1) {
+
+        //click in a polygon (only way to validate right click for the tool selected)
+        if (event.getTarget().getClass() ==  Polygon.class) {
+
+            if( ((Polygon)(event.getTarget())).getStroke() == Settings.WEAPON_MISSILE_COLOR ){
+                fireMissile(player.getCol(), player.getRow(), col, row);
+
+            }else if( ((Polygon)(event.getTarget())).getStroke() == Settings.WEAPON_CANNON_COLOR ){
+                fireCannon(player.getCol(), player.getRow(), col, row);
+
+            }else if( ((Polygon)(event.getTarget())).getStroke() == Settings.MOVE_COLOR ){
+                moveTank(col,row);
+
+            }
+
+            return;
+        }
+
+
+
+
+
+       /* if (dx <= 1 && dx >= -1 && dy <= 1 && dy >= -1) {
             //move the tank
             if (checkIfTankCanMoveToCell((Node) event.getTarget())) {
                 moveTank(dy, dx);
             }
-        }
+        }*/
 
 
     }
@@ -230,7 +257,6 @@ public class CtrGame implements Initializable {
     void gridPaneOnEnter(MouseEvent event) {
 
     }
-
     @FXML
     void gridPaneOnExit(MouseEvent event) {
     }
@@ -271,6 +297,16 @@ public class CtrGame implements Initializable {
 
     }
     // ========================================================
+
+
+
+
+
+
+
+
+
+
 
 
     //initialization :::::::::::::::::::::::::::
@@ -476,23 +512,41 @@ public class CtrGame implements Initializable {
 
 
     //Game methods :::::::::::::::::::::::::::
+    //fire missile between 2 points
+    private void fireMissile(int fromCol, int fromRow, int toCol, int toRow){
+        //turn tank so it faces the enemy
+        changeTankSpriteToFollowCursor(toCol, toRow);
+
+
+
+    }
+    //fire cannon between 2 points
+    private void fireCannon(int fromCol, int fromRow, int toCol, int toRow){
+        //turn tank so it faces the enemy
+        changeTankSpriteToFollowCursor(toCol, toRow);
+
+
+
+    }
     //Move player to a new position in gridpane
-    private synchronized void moveTank(int rows, int cols) {
+    private synchronized void moveTank(int col, int row ) {
 
         player.setMovingNow(true);
+        changeTankSpriteToFollowCursor(col, row);
+
 
         //gridPane.getChildren().remove(player.getImageView());
         gridPane.getChildren().remove(player.getArmorLbl());
-        player.setCol(player.getCol() + cols);
-        player.setRow(player.getRow() + rows);
+        player.setCol(col);
+        player.setRow(row);
 
         //gridPane.add(player.getImageView(), player.getCol(), player.getRow());
         gridPane.add(player.getArmorLbl(), player.getCol(), player.getRow());
 
         TranslateTransition tt = new TranslateTransition(Duration.millis(Settings.TIME_TANK_MOVE), player.getArmorLbl());
-        tt.setFromY(-Settings.CELL_HEIGTH * rows);
+        tt.setFromY(-Settings.CELL_HEIGTH * row);
         tt.setToY(0d);
-        tt.setFromX(-Settings.CELL_WIDTH * cols);
+        tt.setFromX(-Settings.CELL_WIDTH * col);
         tt.setToX(0d);
         tt.setCycleCount(1);
         tt.setAutoReverse(false);
@@ -634,6 +688,34 @@ public class CtrGame implements Initializable {
         }
 
         return nodeRow - player.getRow();
+
+    }
+
+    //get diference between tank position and node position
+    private int getPositionCol(Node node) {
+
+        int nodeCol = getGridNodeCol(node);
+
+        //error
+        if (nodeCol < 0) {
+            return 0;
+        }
+
+        return nodeCol;
+
+    }
+
+    //get diference between tank position and node position
+    private int getPositionRow(Node node) {
+
+        int nodeRow = getGridNodeRow(node);
+
+        //error
+        if (nodeRow < 0) {
+            return 0;
+        }
+
+        return nodeRow ;
 
     }
 
