@@ -1,4 +1,4 @@
-package gameobjects;
+package animations;
 
 
 import javafx.animation.Interpolator;

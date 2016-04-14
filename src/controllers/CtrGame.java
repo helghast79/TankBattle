@@ -11,8 +11,8 @@ import java.net.URL;
 
 import java.util.*;
 
+import animations.AnimationUtils;
 import gameobjects.Player;
-import gameobjects.SpriteAnimation;
 import gameobjects.Weapon;
 import grid.Cell;
 
@@ -27,7 +27,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.*;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 
 import javafx.scene.image.Image;
@@ -35,9 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import main.Navigation;
@@ -53,6 +50,7 @@ public class CtrGame implements Initializable {
 
     private Cell[][] cells;
     private ImageView[][] tiles;
+    private Polygon[][] tiles_polygon;
 
     private HashMap<Position, Label> myTankMoveOptions;
     private int myTankMoveOptions_row;
@@ -231,24 +229,25 @@ public class CtrGame implements Initializable {
             }else if( ((Polygon)(event.getTarget())).getStroke() == Settings.WEAPON_CANNON_COLOR ){
                 fireCannon(player.getCol(), player.getRow(), col, row);
 
+
             }else if( ((Polygon)(event.getTarget())).getStroke() == Settings.MOVE_COLOR ){
+                //move tank
                 moveTank(col,row);
 
             }
 
+
+            //clear marks
+            clearRectangles();
+            //reset btns
+            moveBtn.setSelected(false);
+            repairBtn.setSelected(false);
+            weapon2Btn.setSelected(false);
+            weapon1Btn.setSelected(false);
+
             return;
         }
 
-
-
-
-
-       /* if (dx <= 1 && dx >= -1 && dy <= 1 && dy >= -1) {
-            //move the tank
-            if (checkIfTankCanMoveToCell((Node) event.getTarget())) {
-                moveTank(dy, dx);
-            }
-        }*/
 
 
     }
@@ -287,12 +286,12 @@ public class CtrGame implements Initializable {
 
 
         //check if cell is available for moving
-        if (checkIfTankCanMoveToCell((Node) event.getTarget())) {
+       /* if (checkIfTankCanMoveToCell((Node) event.getTarget())) {
             gridPane.setCursor(Cursor.CLOSED_HAND);
 
         } else {
             gridPane.setCursor(Cursor.DEFAULT);
-        }
+        }*/
 
 
     }
@@ -381,7 +380,7 @@ public class CtrGame implements Initializable {
         cells = mapBuilder.getCellsArray();
 
         tiles = new ImageView[Settings.GRID_ROWS][Settings.GRID_COLS];
-
+        tiles_polygon = new Polygon[Settings.GRID_ROWS][Settings.GRID_COLS];
 
         for (int row = 0; row < Settings.GRID_ROWS; row++) {
             for (int col = 0; col < Settings.GRID_COLS; col++) {
@@ -400,6 +399,7 @@ public class CtrGame implements Initializable {
                         ImageView iv = new ImageView(new Image(new FileInputStream(img), Settings.CELL_WIDTH, Settings.CELL_HEIGTH, false, true));
 
                         tiles[row][col] = iv;
+                        tiles_polygon[row][col] = null;
 
                         gridPane.add(iv, col, row);
                     }
@@ -514,9 +514,11 @@ public class CtrGame implements Initializable {
     //Game methods :::::::::::::::::::::::::::
     //fire missile between 2 points
     private void fireMissile(int fromCol, int fromRow, int toCol, int toRow){
+        player.setMovingNow(true);
+
         //turn tank so it faces the enemy
         changeTankSpriteToFollowCursor(toCol, toRow);
-
+        anim_TankShoot(fromCol, fromRow, toCol, toRow);
 
 
     }
@@ -535,18 +537,20 @@ public class CtrGame implements Initializable {
         changeTankSpriteToFollowCursor(col, row);
 
 
-        //gridPane.getChildren().remove(player.getImageView());
+        //save previous position
+        int old_col = player.getCol();
+        int old_row = player.getRow();
+
         gridPane.getChildren().remove(player.getArmorLbl());
+
         player.setCol(col);
         player.setRow(row);
-
-        //gridPane.add(player.getImageView(), player.getCol(), player.getRow());
-        gridPane.add(player.getArmorLbl(), player.getCol(), player.getRow());
+        gridPane.add(player.getArmorLbl(), col, row);
 
         TranslateTransition tt = new TranslateTransition(Duration.millis(Settings.TIME_TANK_MOVE), player.getArmorLbl());
-        tt.setFromY(-Settings.CELL_HEIGTH * row);
+        tt.setFromY(-Settings.CELL_HEIGTH * (row-old_row));
         tt.setToY(0d);
-        tt.setFromX(-Settings.CELL_WIDTH * col);
+        tt.setFromX(-Settings.CELL_WIDTH * (col-old_col));
         tt.setToX(0d);
         tt.setCycleCount(1);
         tt.setAutoReverse(false);
@@ -720,9 +724,13 @@ public class CtrGame implements Initializable {
     }
 
     //choose the right icon to follow cursor position
-    private void changeTankSpriteToFollowCursor(int dx, int dy) {
+    private void changeTankSpriteToFollowCursor(int col, int row) {
 
         String filename;
+
+        int dx =   col - player.getCol();
+        int dy =   row - player.getRow();
+
 
         double r = Math.atan2(dy, dx) * (-180) / Math.PI;
         double teta = 45 / 2;
@@ -810,7 +818,10 @@ public class CtrGame implements Initializable {
             for (int col = 0; col < Settings.GRID_COLS; col++) {
                 if (node == tiles[row][col]) {
                     return col;
+                }else if (node == tiles_polygon[row][col]) {
+                    return col;
                 }
+
             }
         }
 
@@ -824,6 +835,8 @@ public class CtrGame implements Initializable {
         for (int row = 0; row < Settings.GRID_ROWS; row++) {
             for (int col = 0; col < Settings.GRID_COLS; col++) {
                 if (node == tiles[row][col]) {
+                    return row;
+                }else if (node == tiles_polygon[row][col]) {
                     return row;
                 }
 
@@ -873,6 +886,7 @@ public class CtrGame implements Initializable {
         border.setStrokeWidth(1.0d);
         border.setVisible(true);
         border.setOpacity(0.7f);
+        tiles_polygon[row][col] = border;
         gridPane.add(border, col, row);
         //--------------------------------------
 
@@ -894,12 +908,20 @@ public class CtrGame implements Initializable {
         }
 
 
+        for (int row = 0; row < Settings.GRID_ROWS; row++) {
+            for (int col = 0; col < Settings.GRID_COLS; col++) {
+                tiles_polygon[row][col] = null;
+            }
+        }
+
+
     }
 
     //::::::::::::::::::::::::::::::::::::::::::
 
 
     //Animations :::::::::::::::::::::::::::::::
+    //tank working
     private void anim_TankWorking_Start(SequentialTransition seqT, ImageView iv) {
 
         //PauseTransition pt = new PauseTransition(Duration.millis(200));
@@ -941,60 +963,148 @@ public class CtrGame implements Initializable {
         seqT.play();
 
     }
-
-    private void anim_TankShoot() {
-
-        Image IMAGE = getImage("weapon_missile_attack_start.png");
-
-        int COLUMNS = 2;
-        int COUNT = 6;
-        int OFFSET_X = 0;
-        int OFFSET_Y = 0;
-        int WIDTH = 100;
-        int HEIGHT = 50;
+    //fire missile
+    private void anim_TankShoot(int fromCol, int fromRow, int toCol, int toRow) {
 
 
-        final ImageView imageView = new ImageView(IMAGE);
-        imageView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));
+        //calculate translation and rotational parameters based on node origin and destination
+        int dx =   toCol - fromCol;
+        int dy =   toRow - fromRow;
+
+        int angleToCell = (int)Math.round(Math.atan2(dy, dx) * (-180) / Math.PI);
+        float compensateLength = 0.8f;
+        int corrX=0;
+        int corrY=0;
+        float teta = 45/2;
+
+        //facing right
+        if (angleToCell > -teta && angleToCell <= teta) {
+            corrX = 10;
+            corrY = -10;
+
+            //facing right up
+        } else if (angleToCell > teta && angleToCell <= 90 - teta) {
+            corrX = 5;
+            corrY = -10;
+
+            //facing up
+        } else if (angleToCell > 90 - teta && angleToCell <= 90 + teta) {
+            corrX = -10;
+            corrY = -10;
+
+            //facing up left
+        } else if (angleToCell > 90 + teta && angleToCell <= 180 - teta) {
+            corrX = -15;
+            corrY = -5;
+            compensateLength = 1.0f;
+
+            //facing left
+        } else if (angleToCell <= -teta && angleToCell > -90 + teta) {
+            corrX = -20;
+            corrY = 0;
+            compensateLength = 1.0f;
+
+            //facing down
+        } else if (angleToCell <= -90 + teta && angleToCell > -90 - teta) {
+            corrX = -10;
+            corrY = 0;
+            compensateLength = 1.0f;
+
+            //facing down left
+        } else if (angleToCell <= -90 - teta && angleToCell > -180 + teta) {
+            corrX = -10;
+            corrY = 0;
+            compensateLength = 1.0f;
+
+        }
+
+
+
+
+        //image animation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Image IMAGE = getImage("weapon_missile_attack.png");
+
+        ImageView imageView = new ImageView(IMAGE);
+        imageView.setViewport(new Rectangle2D(0, 0, 100, 50));
         imageView.fitWidthProperty().setValue(100);
         imageView.fitHeightProperty().setValue(50);
         imageView.setY(0);
 
-        final Animation animation = new SpriteAnimation(
-                imageView,
-                Duration.millis(1000),
-                COUNT, COLUMNS,
-                OFFSET_X, OFFSET_Y,
-                WIDTH, HEIGHT
-        );
-        animation.setCycleCount(Animation.INDEFINITE);
+        Animation imageAnimation = AnimationUtils.createSpriteAnimation(imageView,2,4,0,0,100,50,Duration.millis(400));
+        imageAnimation.setCycleCount(Animation.INDEFINITE);
+        imageAnimation.play();
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        animation.play();
+        gridPane.add(imageView,fromCol, fromRow);
 
-        gridPane.add(imageView, player.getCol(), player.getRow());
+
+
+
+        //reposition missile to match tank direction
+        TranslateTransition corrPosAnim = AnimationUtils.createTranslateTransition(10,imageView,corrX,corrY,1);
+        RotateTransition corrRotAnim = AnimationUtils.createRotationTransition(10,imageView,-angleToCell,1);
+
+        //move missile
+        int moveX = (int)(Settings.CELL_WIDTH * 0.8*(toCol-fromCol)) ;
+        int moveY = (int)(Settings.CELL_HEIGTH * 0.8*(toRow-fromRow));
+        TranslateTransition moveMissileAnim = AnimationUtils.createTranslateTransition(900,imageView,moveX,moveY,1);
+
+
+        ParallelTransition missileAnimation = new ParallelTransition(imageView,moveMissileAnim);
+
+
+        SequentialTransition finalAnimation = new SequentialTransition(imageView,corrPosAnim,corrRotAnim,missileAnimation);
+        finalAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+
+                gridPane.getChildren().remove(imageView);
+
+                //explosion
+                anim_explosion(toCol, toRow);
+            }
+        });
+        finalAnimation.setCycleCount(1);
+        finalAnimation.play();
+
+    }
+    //explosion - missile
+    private void anim_explosion(int col,int row){
+
+        //image animation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Image IMAGE = getImage("explosion.png");
+
+        ImageView imageView = new ImageView(IMAGE);
+        imageView.setViewport(new Rectangle2D(0, 0, 50, 50));
+        imageView.fitWidthProperty().setValue(50);
+        imageView.fitHeightProperty().setValue(50);
+        imageView.setY(0);
+
+        Animation imageAnimation = AnimationUtils.createSpriteAnimation(imageView,2,8,0,0,60,60,Duration.millis(500));
+        imageAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+                player.setMovingNow(false);
+                gridPane.getChildren().remove(imageView);
+
+            }
+        });
+
+        imageAnimation.setCycleCount(1);
+        imageAnimation.play();
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        gridPane.add(imageView,col, row);
+
+
     }
 
-    private void rotateNode(Node node, double fromAngle, double toAngle, int time, int cycles) {
-        RotateTransition rt = new RotateTransition(Duration.millis(time), node);
-        rt.setFromAngle(fromAngle);
-        rt.setToAngle(toAngle);
-        rt.setCycleCount(cycles);
 
-        rt.play();
 
-    }
-
-    private void translateeNode(Node node, double fromX, double toX, double fromY, double toY, int time, int cycles) {
-        TranslateTransition tt1 = new TranslateTransition(Duration.millis(time), node);
-        tt1.setFromX(fromX);
-        tt1.setToX(toX);
-        tt1.setFromX(fromY);
-        tt1.setToX(toY);
-        tt1.setCycleCount(cycles);
-        tt1.setAutoReverse(false);
-
-        tt1.play();
-    }
     //::::::::::::::::::::::::::::::::::::::::::
 
 }

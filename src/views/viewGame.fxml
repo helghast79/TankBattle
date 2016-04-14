@@ -111,7 +111,7 @@
             </Label>
             <ToggleButton id="weapon2BtnCSS" fx:id="weapon2Btn" layoutX="4.0" layoutY="116.0" mnemonicParsing="false" onMouseClicked="#weapon2BtnOnClick" prefHeight="45.0" prefWidth="45.0" toggleGroup="$playerBtns" />
             <ToggleButton id="repairBtnCSS" fx:id="repairBtn" layoutX="4.0" layoutY="197.0" mnemonicParsing="false" onMouseClicked="#repairBtnOnClick" prefHeight="45.0" prefWidth="45.0" toggleGroup="$playerBtns" />
-            <ToggleButton id="moveBtnCSS" fx:id="moveBtn" layoutX="4.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#moveBtnOnClick" prefHeight="45.0" prefWidth="45.0" selected="true" toggleGroup="$playerBtns" />
+            <ToggleButton id="moveBtnCSS" fx:id="moveBtn" layoutX="4.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#moveBtnOnClick" prefHeight="45.0" prefWidth="45.0" toggleGroup="$playerBtns" />
             </children>
         </Pane>
     </left>
