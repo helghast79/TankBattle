@@ -85,7 +85,7 @@ public class Navigation {
 
             //if css is passed load it
             if (!css.equals("")) {
-                root.getStylesheets().add(Settings.FILES_CSS_FOLDER + css + ".css");
+                root.getStylesheets().add(getClass().getResource(Settings.FILES_CSS_FOLDER + css + ".css").toString());
             }
 
             //Store the controller

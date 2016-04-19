@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import animations.Sounds;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -60,25 +61,25 @@ public class CtrInit implements Initializable {
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-
-
     //ON ENTER ***********************************************
     @FXML
     void newGameLblOnEnter(MouseEvent event) {
         hoverNode(newGameLbl);
     }
+
     @FXML
     void continueGameLblOnEnter(MouseEvent event) {
 
         if (Navigation.getInstance().viewExists("viewGame")) {
-           continueGameLbl.setDisable(false);
+            continueGameLbl.setDisable(false);
             hoverNode(continueGameLbl);
-        }else{
+        } else {
             continueGameLbl.setDisable(true);
         }
 
 
     }
+
     @FXML
     void exitLblOnEnter(MouseEvent event) {
         hoverNode(exitLbl);
@@ -91,10 +92,12 @@ public class CtrInit implements Initializable {
     void newGameLblExit(MouseEvent event) {
         deHoverNode(newGameLbl);
     }
+
     @FXML
     void continueGameLblOnExit(MouseEvent event) {
         deHoverNode(continueGameLbl);
     }
+
     @FXML
     void exitLblOnExit(MouseEvent event) {
         deHoverNode(exitLbl);
@@ -102,19 +105,17 @@ public class CtrInit implements Initializable {
     //---------------------------------------------------------------
 
 
-
     //ON MOVE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     @FXML
     void paneOnMove(MouseEvent event) {
 
         if (Navigation.getInstance().viewExists("viewGame")) {
-           continueGameLbl.setDisable(false);
-        }else{
+            continueGameLbl.setDisable(false);
+        } else {
             continueGameLbl.setDisable(true);
         }
     }
     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
 
 
     //ON CLICK ===============================================
@@ -122,6 +123,7 @@ public class CtrInit implements Initializable {
     void paneOnClick(MouseEvent event) {
 
     }
+
     @FXML
     void newGameLblOnClick(MouseEvent event) {
 
@@ -135,11 +137,13 @@ public class CtrInit implements Initializable {
         Navigation.getInstance().loadView("viewGameSetup");
 
     }
+
     @FXML
     void continueGameLblOnClick(MouseEvent event) {
 
         Navigation.getInstance().loadView("viewGame");
     }
+
     @FXML
     void exitLblOnClick(MouseEvent event) {
 
@@ -147,12 +151,6 @@ public class CtrInit implements Initializable {
 
     }
     // ========================================================
-
-
-
-
-
-
 
 
     @Override
@@ -167,11 +165,12 @@ public class CtrInit implements Initializable {
         infoLbl.setVisible(false);
         continueGameLbl.setDisable(true);
 
+        //litle tank moving arround
         loadTank();
+
+        //starts the music
+        Sounds.playMusic();
     }
-
-
-
 
 
     private void hoverNode(Node node) {
@@ -283,10 +282,11 @@ public class CtrInit implements Initializable {
         dialog.show();
     }
 
-    private void loadTank(){
+    private void loadTank() {
         try {
-            String filePath = Settings.FILES_RESOURCES_FOLDER + "tank.gif";
-            File img = new File(filePath);
+            String filePath = Settings.FILES_IMAGES_FOLDER + "tank.gif";
+            URL fileURL = this.getClass().getResource(filePath);
+            File img = new File(fileURL.getFile());
             if (img.exists()) {
 
 

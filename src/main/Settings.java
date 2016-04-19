@@ -17,9 +17,14 @@ public class Settings {
 
     //Files
     public static final String FILES_FXML_FOLDER = "/views/";
-    public static final String FILES_CSS_FOLDER = "";    //empty because CSS files are in root
-    public static final String FILES_RESOURCES_FOLDER = "resources/";
-
+    public static final String FILES_CSS_FOLDER = "/css/";    //empty because CSS files are in root
+    public static final String FILES_RESOURCES_FOLDER = "/";
+    public static final String FILES_SOUNDS_FOLDER = "/sounds/";
+    public static final String FILES_IMAGES_FOLDER = "/images/";
+    public static final String FILES_MAP_FOLDER = "/map/";
+    public static final String FILES_WEAPONS_FOLDER = "/weapons/";
+    public static final String FILES_TANK_FOLDER = "/tank/";
+    public static final String FILES_ANIM_FOLDER = "/animations/";
 
     //Grid
     public static final int GRID_ROWS = 10;

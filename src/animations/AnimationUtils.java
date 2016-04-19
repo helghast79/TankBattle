@@ -13,7 +13,9 @@ import javafx.util.Duration;
  */
 public class AnimationUtils {
 
-
+    /**
+     * returns a translate transition
+     */
     public static TranslateTransition createTranslateTransition(int millis, Node node, int byX, int byY, int cycles) {
         TranslateTransition t = new TranslateTransition(Duration.millis(millis), node);
         t.setByX(byX);
@@ -23,6 +25,9 @@ public class AnimationUtils {
 
     }
 
+    /**
+     * returns a rotation transition
+     */
     public static RotateTransition createRotationTransition(int millis, Node node, int byAngle, int cycles) {
         RotateTransition r = new RotateTransition(Duration.millis(millis), node);
         r.setByAngle(byAngle);
@@ -31,6 +36,18 @@ public class AnimationUtils {
 
     }
 
+    /**
+     * returns a sprite animation transition from a imageview with a bundle of sprite images arranged
+     * images are arranged in a number of rows and columns with known size (width & height)
+     * @param imageView
+     * @param spriteColumns
+     * @param spriteCount
+     * @param spriteOffset_X
+     * @param spriteOffset_Y
+     * @param spriteWidth
+     * @param spriteHeight
+     * @param duration
+     */
     public static Animation createSpriteAnimation(ImageView imageView,
                                                   int spriteColumns,
                                                   int spriteCount,

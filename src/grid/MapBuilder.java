@@ -1,6 +1,7 @@
 package grid;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,10 @@ public class MapBuilder {
 
 
         try {
+            //handle path string properly to allow in jar access
+            URL mapFileURL =this.getClass().getResource(mapPath);
 
-            FileReader fileReader = new FileReader(mapPath);
+            FileReader fileReader = new FileReader(mapFileURL.getFile());
             BufferedReader bReader = new BufferedReader(fileReader);
 
             while ((line = bReader.readLine()) != null) {
