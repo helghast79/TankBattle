@@ -139,14 +139,10 @@ public class Navigation {
     }
 
 
-    public void passToViewGame(String playerName, String serverAddress, String portNumber) {
+    /*public void passToViewGame(String playerName, String serverAddress, String portNumber) {
 
-        CtrGame controller =
-                ctrGameFXMLloader.<CtrGame>getController();
+        CtrGame controller = ctrGameFXMLloader.<CtrGame>getController();
         controller.setArgsPassedByGameSetupController(playerName, serverAddress, portNumber);
 
-
-    }
-
-
+    }*/
 }

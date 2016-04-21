@@ -72,10 +72,10 @@ public class CtrGameSetup implements Initializable {
         //from here we always start a new game
         Navigation.getInstance().saveView("viewGame", "CssGame");
         Navigation.getInstance().loadView("viewGame");
+        CtrGame.setGameConfig(playerNameTxt.getText(), serverAddressTxt.getText(),serverPortTxt.getText());
 
         //pass arguments to then viewGame controller
-        Navigation.getInstance().passToViewGame(playerNameTxt.getText(), serverAddressTxt.getText(),serverPortTxt.getText());
-
+        //Navigation.getInstance().passToViewGame(playerNameTxt.getText(), serverAddressTxt.getText(),serverPortTxt.getText());
     }
     // ========================================================
 

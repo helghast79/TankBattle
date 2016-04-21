@@ -169,7 +169,7 @@ public class CtrInit implements Initializable {
         loadTank();
 
         //starts the music
-        //Sounds.playMusic();
+        Sounds.playMusic();
     }
 
 

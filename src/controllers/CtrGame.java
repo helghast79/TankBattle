@@ -45,10 +45,10 @@ import main.Settings;
 
 public class CtrGame implements Initializable {
 
-
-    private String playerName;
-    private String serverAddress;
-    private String portNumber;
+    // Game config variables
+    private static String PLAYERNAME;
+    private static String SERVERADDRESS;
+    private static String PORTNUMBER;
 
 
     private Cell[][] cells;
@@ -299,15 +299,15 @@ private boolean processingMessage = false; //only process 1 message at a time
         createGrid();
 
         //------the rest of initialization will be called after the setArgsPassedbyGameSetupController
-
+        continueInitialization();
     }
 
     //Game setup controller passes this arguments after calling it - runs after initialize method
     public void setArgsPassedByGameSetupController(String playerName, String serverAddress, String portNumber) {
 
-        this.playerName = playerName;
-        this.serverAddress = serverAddress;
-        this.portNumber = portNumber;
+        this.PLAYERNAME = playerName;
+        this.SERVERADDRESS = serverAddress;
+        this.PORTNUMBER = portNumber;
 
         textAreaDown.appendText(playerName + "\n\r");
         textAreaDown.appendText(serverAddress + "\n\r");
@@ -436,7 +436,7 @@ private boolean processingMessage = false; //only process 1 message at a time
     //Initialize our player (tank)
     private void createPlayer() {
 
-        player = new Player(this.playerName,
+        player = new Player(this.PLAYERNAME,
                 Settings.TANK_DEFAULT_ARMOR,
                 Settings.TANK_DEFAULT_INIT_ROW,
                 Settings.TANK_DEFAULT_INIT_COL,
@@ -1052,11 +1052,11 @@ private boolean processingMessage = false; //only process 1 message at a time
 
     }
 
-
     //Messages ::::::::::::::::::::::::::::::::::::::::
     public static void ReceiveMessage(String message){
         ObservableMessageList.add(message);
     }
+
     private void processMessage(String message){
         //String[] commands = message.split(":");
 
@@ -1072,6 +1072,7 @@ private boolean processingMessage = false; //only process 1 message at a time
 
 
     }
+
     private void DispatchMessage(String message){
 
     }
@@ -1080,4 +1081,11 @@ private boolean processingMessage = false; //only process 1 message at a time
 
     //::::::::::::::::::::::::::::::::::::::::::
 
+    public static void setGameConfig(String pName, String sAddress, String pNumber) {
+
+        CtrGame.PLAYERNAME = pName;
+        CtrGame.SERVERADDRESS = sAddress;
+        CtrGame.PORTNUMBER = pNumber;
+
+    }
 }
