@@ -20,6 +20,9 @@ import grid.Cell;
 import grid.CellTypes;
 import grid.MapBuilder;
 import javafx.animation.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -71,6 +74,11 @@ public class CtrGame implements Initializable {
     enum weapons {
         CANNON, MISSILE
     }
+
+    //message linked messageList
+    private static List<String> MessageList;
+    private static ObservableList<String> ObservableMessageList;
+private boolean processingMessage = false; //only process 1 message at a time
 
 
     //NODES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -128,8 +136,8 @@ public class CtrGame implements Initializable {
     //ON CLICK ===============================================
     @FXML
     void endTurnBtnOnClick(MouseEvent event) {
-
-
+        ReceiveMessage("1");
+        //ReceiveMessage("2");
     }
 
 
@@ -216,21 +224,22 @@ public class CtrGame implements Initializable {
         if (event.getTarget().getClass() == Polygon.class) {
 
             if (((Polygon) (event.getTarget())).getStroke() == Settings.WEAPON_MISSILE_COLOR) {
-                fireMissile(player.getCol(), player.getRow(), col, row);
+                fireMissile(player, player.getCol(), player.getRow(), col, row);
 
             } else if (((Polygon) (event.getTarget())).getStroke() == Settings.WEAPON_CANNON_COLOR) {
-                fireCannon(player.getCol(), player.getRow(), col, row);
+                fireCannon(player, player.getCol(), player.getRow(), col, row);
 
 
             } else if (((Polygon) (event.getTarget())).getStroke() == Settings.MOVE_COLOR) {
                 //move tank
-                moveTank(col, row);
+                moveTank(player,player.getCol(), player.getRow(), col, row);
 
             }
 
 
             //clear marks
             clearRectangles();
+
             //reset btns
             moveBtn.setSelected(false);
             repairBtn.setSelected(false);
@@ -273,7 +282,7 @@ public class CtrGame implements Initializable {
         }
 
 
-        changeTankSpriteToFollowCursor(col, row);
+        changeTankSpriteToFollowCursor(player, col, row);
 
 
     }
@@ -310,10 +319,34 @@ public class CtrGame implements Initializable {
     //Initialization was paused because GameSetup is passing args which are needed for the rest of initialization
     private void continueInitialization() {
 
+        //init message messageList
+        MessageList = new LinkedList<String>();
+        ObservableMessageList = FXCollections.observableList(MessageList);
+        ObservableMessageList.addListener(new ListChangeListener() {
+
+            @Override
+            public void onChanged(ListChangeListener.Change change)  {
+
+                //while(ObservableMessageList.size()>0){
+                    //get last message
+                    String message = ObservableMessageList.get(ObservableMessageList.size() - 1);
+
+                    processingMessage = true;
+                    //process message
+                    processMessage(message);
+
+                    //remove last message from list
+                    ObservableMessageList.remove(message);
+                //}
+
+            }
+        });
+
+
         //create player
         createPlayer();
 
-        //poulate the left toolbar
+        //populate the left toolbar
         loadToolbarSprites();
 
         //add player to the grid
@@ -487,32 +520,36 @@ public class CtrGame implements Initializable {
 
     //Game methods :::::::::::::::::::::::::::
     //fire missile between 2 points
-    private void fireMissile(int fromCol, int fromRow, int toCol, int toRow) {
+    private void fireMissile(Player anyPlayer, int fromCol, int fromRow, int toCol, int toRow) {
         player.setMovingNow(true);
 
         //turn tank so it faces the enemy
-        changeTankSpriteToFollowCursor(toCol, toRow);
+        changeTankSpriteToFollowCursor(anyPlayer, toCol, toRow);
 
-        anim_TankShoot(fromCol, fromRow, toCol, toRow);
-        Sounds.stopMusic();
+        anim_TankMissileShoot(fromCol, fromRow, toCol, toRow);
+        //Sounds.stopMusic();
 
     }
 
     //fire cannon between 2 points
-    private void fireCannon(int fromCol, int fromRow, int toCol, int toRow) {
+    private void fireCannon(Player anyPlayer, int fromCol, int fromRow, int toCol, int toRow) {
         //turn tank so it faces the enemy
-        changeTankSpriteToFollowCursor(toCol, toRow);
+        changeTankSpriteToFollowCursor(anyPlayer, toCol, toRow);
 
 
     }
 
     //Move player to a new position in gridpane
-    private synchronized void moveTank(int col, int row) {
+    private synchronized void moveTank(Player anyPlayer, int fromCol, int fromRow, int toCol, int toRow) {
 
-        player.setMovingNow(true);
-        changeTankSpriteToFollowCursor(col, row);
+        anyPlayer.setMovingNow(true);
+        changeTankSpriteToFollowCursor(anyPlayer, toCol, toRow);
 
-        anim_tankMoving(col, row);
+        //save new position in player properties
+        anyPlayer.setCol(toCol);
+        anyPlayer.setRow(toRow);
+
+        anim_tankMoving(anyPlayer, fromCol, fromRow, toCol, toRow);
     }
 
     //prior to move check if tank can go to that cell
@@ -599,12 +636,12 @@ public class CtrGame implements Initializable {
     }
 
     //choose the right icon to follow cursor position
-    private void changeTankSpriteToFollowCursor(int col, int row) {
+    private void changeTankSpriteToFollowCursor(Player anyPlayer, int col, int row) {
 
         String filename;
 
-        int dx = col - player.getCol();
-        int dy = row - player.getRow();
+        int dx = col - anyPlayer.getCol();
+        int dy = row - anyPlayer.getRow();
 
 
         double r = Math.atan2(dy, dx) * (-180) / Math.PI;
@@ -642,7 +679,7 @@ public class CtrGame implements Initializable {
             filename = "tank_mv_left.png";
         }
 
-        changeIcon(player.getImageView(), Settings.FILES_TANK_FOLDER+filename);
+        changeIcon(anyPlayer.getImageView(), Settings.FILES_TANK_FOLDER +filename);
 
     }
 
@@ -794,22 +831,16 @@ public class CtrGame implements Initializable {
 
     //Animations :::::::::::::::::::::::::::::::
     //move tank animation
-    private void anim_tankMoving(int col, int row) {
+    private void anim_tankMoving(Player anyPlayer, int fromCol, int fromRow, int toCol, int toRow) {
 
-        //save previous position
-        int old_col = player.getCol();
-        int old_row = player.getRow();
+        gridPane.getChildren().remove(anyPlayer.getArmorLbl());
 
-        gridPane.getChildren().remove(player.getArmorLbl());
+        gridPane.add(anyPlayer.getArmorLbl(), toCol, toRow);
 
-        player.setCol(col);
-        player.setRow(row);
-        gridPane.add(player.getArmorLbl(), col, row);
-
-        TranslateTransition tt = new TranslateTransition(Duration.millis(Settings.TIME_TANK_MOVE), player.getArmorLbl());
-        tt.setFromY(-Settings.CELL_HEIGTH * (row - old_row));
+        TranslateTransition tt = new TranslateTransition(Duration.millis(Settings.TIME_TANK_MOVE), anyPlayer.getArmorLbl());
+        tt.setFromY(-Settings.CELL_HEIGTH * (toRow - fromRow));
         tt.setToY(0d);
-        tt.setFromX(-Settings.CELL_WIDTH * (col - old_col));
+        tt.setFromX(-Settings.CELL_WIDTH * (toCol - fromCol));
         tt.setToX(0d);
         tt.setCycleCount(1);
         tt.setAutoReverse(false);
@@ -819,8 +850,12 @@ public class CtrGame implements Initializable {
             @Override
             public void handle(ActionEvent event) {
 
-                player.setMovingNow(false);
+                anyPlayer.setMovingNow(false);
                 Sounds.stopTankMove();
+                if(processingMessage){
+                    processingMessage = false;
+                }
+
             }
         });
 
@@ -857,7 +892,7 @@ public class CtrGame implements Initializable {
     }
 
     //fire missile
-    private void anim_TankShoot(int fromCol, int fromRow, int toCol, int toRow) {
+    private void anim_TankMissileShoot(int fromCol, int fromRow, int toCol, int toRow) {
 
 
         //calculate translation and rotational parameters based on node origin and destination
@@ -953,6 +988,11 @@ public class CtrGame implements Initializable {
 
                 //explosion
                 anim_explosion(toCol, toRow);
+
+                if(processingMessage){
+                    processingMessage = false;
+                }
+
             }
         });
         finalAnimation.setCycleCount(1);
@@ -1013,9 +1053,28 @@ public class CtrGame implements Initializable {
     }
 
 
-    //::::::::::::::::::::::::::::::::::::::::::
+    //Messages ::::::::::::::::::::::::::::::::::::::::
+    public static void ReceiveMessage(String message){
+        ObservableMessageList.add(message);
+    }
+    private void processMessage(String message){
+        //String[] commands = message.split(":");
 
 
+
+        if(message.equals("1")){
+            moveTank(player, player.getCol(), player.getRow(),player.getCol()+1,player.getRow()-1 );
+            //processingMessage is altered at the end of the animation function
+        }else if(message.equals("2")){
+            fireMissile(player, player.getCol(), player.getRow(),player.getCol()-1,player.getRow()+1 );
+            //processingMessage is altered at the end of the animation function
+        }
+
+
+    }
+    private void DispatchMessage(String message){
+
+    }
     //// :::::::::::::::::::::::::::::
 
 

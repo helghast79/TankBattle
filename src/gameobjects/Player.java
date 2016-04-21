@@ -21,7 +21,37 @@ public class Player {
     private Image imageDownLeft;
     private Image imageUpRight;
     private Image imageUpLeft;
-private Label armorLbl;
+    private Label armorLbl;
+
+    private ArrayList<Weapon> weapons;
+    private int currentWeaponIndex;
+
+    private int row;
+    private int col;
+    private boolean movingNow; //wait until movement is finished
+
+    private String name;
+    private int armor;
+
+    private int totalMoves;
+    private int movesLeft;
+
+
+    public Player(String name, int armor, int row, int col, int totalMoves) {
+
+        this.name = name;
+        this.armor = armor;
+        this.row = row;
+        this.col = col;
+
+        this.totalMoves = totalMoves;
+        this.movesLeft = this.totalMoves;
+
+        //this.imageView = new ImageView(); //use setArgsPassedByGameSetupController instead
+        this.weapons = new ArrayList<Weapon>();
+        this.movingNow = false;
+    }
+
 
     public Image getImageDownRight() {
         return imageDownRight;
@@ -53,37 +83,6 @@ private Label armorLbl;
 
     public void setImageUpLeft(Image imageUpLeft) {
         this.imageUpLeft = imageUpLeft;
-    }
-
-
-
-    private ArrayList<Weapon> weapons;
-    private int currentWeaponIndex;
-
-    private int row;
-    private int col;
-    private boolean movingNow; //wait until movement is finished
-
-    private String name;
-    private int armor;
-
-    private int totalMoves;
-    private int movesLeft;
-
-
-    public Player(String name, int armor, int row, int col, int totalMoves) {
-
-        this.name = name;
-        this.armor = armor;
-        this.row = row;
-        this.col = col;
-
-        this.totalMoves = totalMoves;
-        this.movesLeft = this.totalMoves;
-
-        //this.imageView = new ImageView(); //use setArgsPassedByGameSetupController instead
-        this.weapons = new ArrayList<Weapon>();
-        this.movingNow = false;
     }
 
     public ImageView getImageView() {
@@ -133,6 +132,7 @@ private Label armorLbl;
     public int getArmor() {
         return armor;
     }
+
     public String getArmorString() {
         return Integer.toString(armor);
     }
@@ -186,9 +186,6 @@ private Label armorLbl;
     }
 
 
-
-
-
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
@@ -198,8 +195,7 @@ private Label armorLbl;
     }
 
 
-
-   //Label
+    //Label
     public Label getArmorLbl() {
         return armorLbl;
     }
@@ -209,13 +205,11 @@ private Label armorLbl;
     }
 
 
-
-
-
     public void addWeapon(Weapon weapon) {
         this.weapons.add(weapon);
 
     }
+
     public void addWeapon(int index, Weapon weapon) {
         this.weapons.add(index, weapon);
 
@@ -224,26 +218,28 @@ private Label armorLbl;
     public void removeWeapon(int index) {
         this.weapons.remove(index);
     }
+
     public void removeWeapon(Weapon weapon) {
         this.weapons.remove(weapon);
     }
 
     public Weapon getNextWeapon() {
         //no weapons
-        if(weapons.size()==0) return null;
+        if (weapons.size() == 0) return null;
 
         //go back to first weapon
-        if(currentWeaponIndex == weapons.size()-1){
+        if (currentWeaponIndex == weapons.size() - 1) {
             currentWeaponIndex = 0;
-        }else{ //or next
-            currentWeaponIndex +=1;
+        } else { //or next
+            currentWeaponIndex += 1;
         }
 
         return weapons.get(currentWeaponIndex);
     }
+
     public Weapon getWeapon(int index) {
         //no weapons
-        if(index <0 || index >=weapons.size()) return null;
+        if (index < 0 || index >= weapons.size()) return null;
 
         return weapons.get(index);
     }
