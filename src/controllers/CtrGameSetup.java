@@ -69,9 +69,20 @@ public class CtrGameSetup implements Initializable {
     @FXML
     void startLblOnClick(MouseEvent event) {
 
-        //from here we always start a new game
-        Navigation.getInstance().saveView("viewGame", "CssGame");
+        if (!Navigation.getInstance().viewExists("viewGame")) {
+
+            Navigation.getInstance().saveView("viewGame", "CssGame");
+        }
+
         Navigation.getInstance().loadView("viewGame");
+
+
+
+        //from here we always start a new game
+        //Navigation.getInstance().saveView("viewGame", "CssGame");
+        //Navigation.getInstance().loadView("viewGame");
+
+        //Navigation.getInstance().loadScreen("viewGame", "CssGame");
         CtrGame.setGameConfig(playerNameTxt.getText(), serverAddressTxt.getText(),serverPortTxt.getText());
 
         //pass arguments to then viewGame controller

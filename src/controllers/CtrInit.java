@@ -132,8 +132,10 @@ public class CtrInit implements Initializable {
 
         //check if view already exists and show it (to keep old values)
         if (!Navigation.getInstance().viewExists("viewGameSetup")) {
+
             Navigation.getInstance().saveView("viewGameSetup", "CssGameSetup");
         }
+
         Navigation.getInstance().loadView("viewGameSetup");
 
     }
@@ -283,6 +285,7 @@ public class CtrInit implements Initializable {
     }
 
     private void loadTank() {
+
         try {
             String filePath = Settings.FILES_IMAGES_FOLDER + "tank.gif";
             URL fileURL = this.getClass().getResource(filePath);
@@ -317,12 +320,9 @@ public class CtrInit implements Initializable {
         tt.setCycleCount(Animation.INDEFINITE);
         tt.setAutoReverse(false);
 
-
         tt.play();
 
-
     }
-
 }
 
 

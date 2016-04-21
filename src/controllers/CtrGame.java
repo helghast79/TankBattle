@@ -78,7 +78,7 @@ public class CtrGame implements Initializable {
     //message linked messageList
     private static List<String> MessageList;
     private static ObservableList<String> ObservableMessageList;
-private boolean processingMessage = false; //only process 1 message at a time
+    private boolean processingMessage = false; //only process 1 message at a time
 
 
     //NODES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -378,9 +378,13 @@ private boolean processingMessage = false; //only process 1 message at a time
 
     //construct the gridPane with the map from file
     private void createGrid() {
+
         //only path string needed since MapBuilder class will handle class path in jar properly
+        //String path = Settings.FILES_MAP_FOLDER + "map.txt";
+        //URL fURL = getClass().getResource(path);
+
         String mapFilePath = Settings.FILES_MAP_FOLDER + "map.txt";
-        MapBuilder mapBuilder = new MapBuilder(mapFilePath);
+        MapBuilder mapBuilder = new MapBuilder( mapFilePath);
 
         cells = mapBuilder.getCellsArray();
 

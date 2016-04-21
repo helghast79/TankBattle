@@ -1,6 +1,5 @@
 package main;
 
-import controllers.CtrGame;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -54,7 +53,6 @@ public class Navigation {
         return stage;
     }
 
-
     private void setScene(Scene scene) {
 
         // setArgsPassedByGameSetupController the scene
@@ -64,24 +62,20 @@ public class Navigation {
         stage.show();
     }
 
-
     public void saveView(String view, String css) {
+
         try {
 
             // Instantiate the view and the controller
             FXMLLoader fxmlLoader;
             fxmlLoader = new FXMLLoader(getClass().getResource(Settings.FILES_FXML_FOLDER + view + ".fxml"));
+
             Parent root = fxmlLoader.load();
 
-
-            
             //store the loader because it's necessary to comunicate between controllers
             if (view.equals("viewGame")) {
                 ctrGameFXMLloader = fxmlLoader;
             }
-
-
-
 
             //if css is passed load it
             if (!css.equals("")) {
@@ -107,7 +101,6 @@ public class Navigation {
             System.out.println("Failure to load view " + view + " : " + e.getMessage());
         }
     }
-
 
     public void loadView(String view) {
 
@@ -137,6 +130,37 @@ public class Navigation {
 
         return false;
     }
+
+    /*public void loadScreen(String view, String css) {
+
+        try {
+
+            // Instantiate the view and the controller
+            FXMLLoader fxmlLoader;
+            fxmlLoader = new FXMLLoader(getClass().getResource(Settings.FILES_FXML_FOLDER + view + ".fxml"));
+            Parent root = fxmlLoader.load();
+
+            //Store the controller
+            //controllers.put(view, fxmlLoader.getController());
+
+            // Create a new scene and add it to the stack
+            Scene scene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+
+            //if css is passed load it
+            if (!css.equals("")) {
+                root.getStylesheets().add(getClass().getResource(Settings.FILES_CSS_FOLDER + css + ".css").toString());
+            }
+            //scenes.push(scene);
+
+            // Put the scene on the stage
+            //setScene(scene);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            System.out.println("Failure to load view " + view + " : " + e.getMessage());
+        }
+    }*/
 
 
     /*public void passToViewGame(String playerName, String serverAddress, String portNumber) {
